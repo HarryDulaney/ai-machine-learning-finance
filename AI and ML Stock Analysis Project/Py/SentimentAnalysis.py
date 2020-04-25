@@ -55,11 +55,10 @@ custom_lexicon.update(analyzer.lexicon)
 analyzer.lexicon = custom_lexicon
 
 # End VADER Lexicon customization
-
+numPages = int(input(__prompt='How many pages of articles do you want to analyze? '))
 scores = {}
-
 # Iterate through search results pages
-for i in range(1, 2):
+for i in range(1, numPages):
     page = urlopen('https://www.businesstimes.com.sg/search/microsoft?page=' + str(i)).read()
     soup = BeautifulSoup(page, features="html.parser")
     # Find the html tag matching <div class="media-body">
@@ -84,11 +83,12 @@ for i in range(1, 2):
         sentiment = analyzer.polarity_scores(passage)['compound']
         scores.setdefault(date, []).append(sentiment)
 
+df_scores = pd.DataFrame(scores.items(), columns=['Date', 'Score'])
+
 plt.figure(figsize=(20, 10))
 plt.title('Changing sentiment of MSFT over time')
 plt.xlabel('Date', fontsize=20)
-plt.ylabel('Polarity Score - Vader expanded lexicon to include Loughran & McDonald words ', fontsize=15)
-plt.plot(scores.values().__getattribute__('sentiment'))
-plt.plot(valid[['Close', 'predict']])
-plt.legend(['Trained Price', 'Actual Price', 'Predicted Price'], loc='top left')
+plt.ylabel('Polarity Score - Vader expanded lexicon includes Loughran & McDonald words ', fontsize=15)
+plt.plot(df_scores[['Date', 'Score']])
+plt.legend(['Date of Article', 'Sentiment Score'], loc='top left')
 plt.show()
