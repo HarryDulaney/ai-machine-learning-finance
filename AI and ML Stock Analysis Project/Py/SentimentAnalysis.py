@@ -8,6 +8,7 @@ import keras as ker
 from bs4 import BeautifulSoup
 import nltk
 import warnings
+import matplotlib.pyplot as plt
 
 warnings.filterwarnings('ignore')
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
@@ -19,22 +20,26 @@ analyzer = SentimentIntensityAnalyzer()
 # Begin update VADER's default Lexicon with Loughran and McDonald words lists and preconfigured stock lexicon
 # Read in the Loughran and McDonald words list for positive sentiment
 # For web deploy
-# url_pos = (
-#   'https://raw.githubusercontent.com/HarryDulaney/ai-machine-learning-finance/master/LoughranMcDonald_positive_word_lists.csv')
+url_pos = (
+    'https://raw.githubusercontent.com/HarryDulaney/ai-machine-learning-finance/master/LoughranMcDonald_positive_word_lists.csv')
 
 # Read in the Loughran and McDonald words list for negative sentiment
-# url_neg = (
-#   'https://raw.githubusercontent.com/HarryDulaney/ai-machine-learning-finance/master/LoughranMcDonald_negative_word_lists.csv')
+url_neg = (
+    'https://raw.githubusercontent.com/HarryDulaney/ai-machine-learning-finance/master/LoughranMcDonald_negative_word_lists.csv')
+
+# For Local Deploy
+# url_pos = ('datasource/LoughranMcDonald_positive_word_lists.csv')
+# url_neg = ('datasource/LoughranMcDonald_negative_word_lists.csv')
 
 
 positive = []
-with open('datasource/LoughranMcDonald_positive_word_lists.csv', 'r') as pos:
+with open(url_pos, 'r') as pos:
     reader = csv.reader(pos)
     for row in reader:
         positive.append(row[0].strip())
 
 negative = []
-with open('datasource/LoughranMcDonald_negative_word_lists.csv', 'r') as neg:
+with open(url_neg, 'r') as neg:
     reader = csv.reader(neg)
     for row in reader:
         entry = row[0].strip().split(" ")
@@ -46,7 +51,6 @@ with open('datasource/LoughranMcDonald_negative_word_lists.csv', 'r') as neg:
 custom_lexicon = {}
 custom_lexicon.update({word: 2.0 for word in positive})
 custom_lexicon.update({word: -2.0 for word in negative})
-#custom_lexicon.update(stock_lex_scaled)
 custom_lexicon.update(analyzer.lexicon)
 analyzer.lexicon = custom_lexicon
 
@@ -80,4 +84,11 @@ for i in range(1, 2):
         sentiment = analyzer.polarity_scores(passage)['compound']
         scores.setdefault(date, []).append(sentiment)
 
-print(scores)
+plt.figure(figsize=(20, 10))
+plt.title('Changing sentiment of MSFT over time')
+plt.xlabel('Date', fontsize=20)
+plt.ylabel('Polarity Score - Vader expanded lexicon to include Loughran & McDonald words ', fontsize=15)
+plt.plot(scores.values().__getattribute__('sentiment'))
+plt.plot(valid[['Close', 'predict']])
+plt.legend(['Trained Price', 'Actual Price', 'Predicted Price'], loc='top left')
+plt.show()
