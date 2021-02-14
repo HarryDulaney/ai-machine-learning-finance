@@ -5,6 +5,11 @@
   LSTMs (“long short-term memory” units) are the most powerful and well known subset of Recurrent Neural Networks.
   They are a type of artificial neural network designed to recognize patterns in sequences of data, such as numerical
   times series data.
+  
+  DISCLAIMER: A core characteristic of financial markets is unpredictability. 
+  Historic prices' influence on future value is often a result of market makers relying on past price trend to make buying and selling decisions and is by no means
+  guaranteed to predict the future price of a security. 
+  Trend analysis is one tool in a toolbox for making sound investing decisions and should be used alongside fundamental analysis, diversification, and moderation.
 """
 
 import math
