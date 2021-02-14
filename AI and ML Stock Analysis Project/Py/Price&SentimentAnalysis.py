@@ -9,7 +9,7 @@
   DISCLAIMER: A core characteristic of financial markets is unpredictability. 
   Historic prices' influence on future value is often a result of market makers relying on past price trend to make buying and selling decisions and is by no means
   guaranteed to predict the future price of a security. 
-  Trend analysis is one tool in a toolbox for making sound investing decisions and should be used alongside fundamental analysis, diversification, and moderation.
+  Trend analysis is one tool in an investors toolbox and should be used alongside fundamental analysis and diversification for making sound investing decisions.
 """
 
 import math
